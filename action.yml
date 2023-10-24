@@ -33,5 +33,9 @@ runs:
       run: |
         set -euxo pipefail
         pvnctl auth context use ${{ inputs.auth_context }}
-        RELEASE_ID=$(pvnctl releases record --service=${{ inputs.service }} --release-channel=${{ inputs.release_channel }} --deployment-system=${{ inputs.deployment_system }} --pending=${{ inputs.pending }})
+        CMD="pvnctl releases record --service=${{ inputs.service }} --release-channel=${{ inputs.release_channel }} --deployment-system=${{ inputs.deployment_system }}"
+        if [[ "${{ inputs.pending }}" == "true" ]]; then
+          CMD="$CMD --pending"
+        fi
+        RELEASE_ID=$(eval "${CMD}")
         echo "release-id=$RELEASE_ID" >> $GITHUB_OUTPUT
