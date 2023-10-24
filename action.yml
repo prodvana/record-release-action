@@ -19,14 +19,19 @@ inputs:
     description: "pvnctl auth context to use. If you're using this Action with init-pvnctl, leave as the default"
     required: true
     default: "default"
-outputs: {}
+outputs:
+  release_id:
+    description: "A unique identifier for the release created"
+    value: ${{ steps.pvnctl-releases-record.outputs.release-id }}
 runs:
   using: "composite"
   steps:
     - uses: actions/checkout@v3
-    - name: pvnctl configs apply
+    - name: pvnctl releases record
+      id: pvnctl-releases-record
       shell: bash
       run: |
         set -euxo pipefail
         pvnctl auth context use ${{ inputs.auth_context }}
-        pvnctl releases record --service=${{ inputs.service }} --release-channel=${{ inputs.release_channel }} --deployment-system=${{ inputs.deployment_system }} --pending=${{ inputs.pending }}
+        RELEASE_ID=$(pvnctl releases record --service=${{ inputs.service }} --release-channel=${{ inputs.release_channel }} --deployment-system=${{ inputs.deployment_system }} --pending=${{ inputs.pending }})
+        echo "release-id=$RELEASE_ID" >> $GITHUB_OUTPUT
