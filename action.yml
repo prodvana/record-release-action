@@ -1,0 +1,32 @@
+name: "Record release"
+description: "Record a release done externally to Prodvana."
+inputs:
+  service:
+    description: "A unique name for the service being released, e.g. api, web"
+    required: true
+  release_channel:
+    description: "A unique name for the release channel of the service being released, e.g. staging, prod"
+    required: true
+  deployment_system:
+    description: "The deployment system doing the release"
+    required: true
+    default: "github-actions"
+  pending:
+    description: "Record the release in pending state instead of succeeded state, meant to be used with update-release-status action"
+    type: boolean
+    defualt: false
+  auth_context:
+    description: "pvnctl auth context to use. If you're using this Action with init-pvnctl, leave as the default"
+    required: true
+    default: "default"
+outputs: {}
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v3
+    - name: pvnctl configs apply
+      shell: bash
+      run: |
+        set -euxo pipefail
+        pvnctl auth context use ${{ inputs.auth_context }}
+        pvnctl releases record --service=${{ inputs.service }} --release-channel=${{ inputs.release_channel }} --deployment-system=${{ inputs.deployment_system }} --pending=${{ inputs.pending }}
