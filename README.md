@@ -13,6 +13,7 @@ This action records a release happening on GitHub Actions to Prodvana.
 
 | Input             | Default        | Description                                                                                                                                              |
 | ----------------- | -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| app               | (required)     | A unique name for the application being released. An application is a collection of related services with the same set of release channels. e.g. infra, product, <company name>     |
 | service           | (required)     | A unique name for the service being released, e.g. api, web                                                                                              |
 | release_channel   | (required)     | A unique name for the release channel of the service being released, e.g. staging, prod                                                                  |
 | deployment_system | github-actions | The deployment system doing the release                                                                                                                  |
@@ -25,12 +26,13 @@ This action records a release happening on GitHub Actions to Prodvana.
 ```yaml
 steps:
   # pvnctl must be installed in your Action environment for configs-apply
-  - uses: prodvana/init-pvnctl-action@v0.1.0 
+  - uses: prodvana/init-pvnctl-action@v0.1.0
     with:
       org: my-org
       api_token: ${{ secrets.YOUR_PRODVANA_API_TOKEN }}
-  - uses: prodvana/record-release-action@v0.1.0
+  - uses: prodvana/record-release-action@v0.1.1
     with:
+      app: product-name
       service: web
       release_channel: prod
 ```
