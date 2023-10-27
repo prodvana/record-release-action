@@ -26,7 +26,7 @@ This action records a release happening on GitHub Actions to Prodvana.
 ```yaml
 steps:
   # pvnctl must be installed in your Action environment for configs-apply
-  - uses: prodvana/init-pvnctl-action@v0.1.1
+  - uses: prodvana/init-pvnctl-action@v0.1.0
     with:
       org: my-org
       api_token: ${{ secrets.YOUR_PRODVANA_API_TOKEN }}
