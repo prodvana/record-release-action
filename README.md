@@ -30,7 +30,7 @@ steps:
     with:
       org: my-org
       api_token: ${{ secrets.YOUR_PRODVANA_API_TOKEN }}
-  - uses: prodvana/record-release-action@v0.1.1
+  - uses: prodvana/record-release-action@v0.1.2
     with:
       app: product-name
       service: web
